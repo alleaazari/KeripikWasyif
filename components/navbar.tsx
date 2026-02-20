@@ -31,16 +31,40 @@ export function Navbar() {
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b border-purple-500/20 bg-black/30">
-        <div className="flex justify-between items-center py-3 px-4 lg:px-6 max-w-7xl mx-auto">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-all duration-300 flex-shrink-0">
-            <img src="/icon.png" alt="KripikWasyif" className="w-8 h-8 lg:w-12 lg:h-12 rounded-full" />
-            <span className="text-sm lg:text-lg font-bold bg-gradient-to-r from-purple-300 to-purple-500 bg-clip-text text-transparent whitespace-nowrap">
+        {/* Mobile: brand left + hamburger right */}
+        <div className="lg:hidden flex justify-between items-center py-3 px-4">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-all duration-300">
+            <img src="/icon.png" alt="KripikWasyif" className="w-8 h-8 rounded-full" />
+            <span className="text-sm font-bold bg-gradient-to-r from-purple-300 to-purple-500 bg-clip-text text-transparent whitespace-nowrap">
               Keripik Wasyif
             </span>
           </Link>
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="p-2 rounded-lg text-purple-300 hover:text-purple-100 hover:bg-purple-500/10 transition-all"
+          >
+            {mobileOpen ? (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
 
-          {/* Desktop nav */}
-          <div className="hidden lg:flex gap-6 xl:gap-8 items-center">
+        {/* Desktop: everything centered in one row */}
+        <div className="hidden lg:flex justify-center items-center py-4 px-6">
+          <div className="flex items-center gap-10">
+            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-all duration-300">
+              <img src="/icon.png" alt="KripikWasyif" className="w-12 h-12 rounded-full" />
+              <span className="text-lg font-bold bg-gradient-to-r from-purple-300 to-purple-500 bg-clip-text text-transparent whitespace-nowrap">
+                Keripik Wasyif
+              </span>
+            </Link>
+
             {links.map((link) => (
               <Link
                 key={link.id}
@@ -61,25 +85,9 @@ export function Navbar() {
               </Link>
             ))}
           </div>
-
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-2 rounded-lg text-purple-300 hover:text-purple-100 hover:bg-purple-500/10 transition-all"
-          >
-            {mobileOpen ? (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
-          </button>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile dropdown menu */}
         {mobileOpen && (
           <div className="lg:hidden border-t border-purple-500/20 bg-black/60 backdrop-blur-xl">
             <div className="flex flex-col py-2 px-4">

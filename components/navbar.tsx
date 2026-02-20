@@ -29,8 +29,11 @@ export function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/20 border-b border-purple-500/20">
       <div className="flex justify-center items-center py-4 px-6">
         <div className="flex items-center justify-center gap-12">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-all duration-300">
-            <img src="/icon.png" alt="KripikWasyif" className="w-8 h-8 rounded-full" />
+          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-all duration-300">
+            <img src="/icon.png" alt="KripikWasyif" className="w-12 h-12 rounded-full" />
+            <span className="text-lg font-bold bg-gradient-to-r from-purple-300 to-purple-500 bg-clip-text text-transparent">
+              Keripik Wasyif
+            </span>
           </Link>
 
           <div className="flex gap-8 items-center">

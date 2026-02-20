@@ -109,7 +109,7 @@ export default function AdminKegiatanPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
                     <h1 className="text-xl md:text-2xl font-bold text-purple-100">Kegiatan KKN</h1>
-                    <p className="text-purple-300/60 text-xs md:text-sm mt-1">Kelola dokumentasi kegiatan KKN</p>
+                    <p className="text-purple-300/60 text-xs md:text-sm mt-1">Kelola dokumentasi kegiatan KKN - <span className="text-purple-400 font-bold">Versi Terbaru (Galeri Aktif)</span></p>
                 </div>
                 <button
                     onClick={() => {

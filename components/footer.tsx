@@ -30,9 +30,9 @@ export function Footer() {
                     {/* Social */}
                     <div className="col-span-4 text-right">
                         <div className="space-y-2">
-                            <a href="#" className="block text-purple-200/70 hover:text-white text-xs underline underline-offset-2 transition-colors">Facebook</a>
-                            <a href="#" className="block text-purple-200/70 hover:text-white text-xs underline underline-offset-2 transition-colors">Instagram</a>
-                            <a href="#" className="block text-purple-200/70 hover:text-white text-xs underline underline-offset-2 transition-colors">WhatsApp</a>
+                            <a href="https://www.facebook.com/share/1D7jAGSFzq/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="block text-purple-200/70 hover:text-white text-xs underline underline-offset-2 transition-colors">Facebook</a>
+                            <a href="https://www.instagram.com/saronda_arr?igsh=MTJvZ2QzZ3J6NmozdQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="block text-purple-200/70 hover:text-white text-xs underline underline-offset-2 transition-colors">Instagram</a>
+                            <a href="https://wa.me/6289617447090" target="_blank" rel="noopener noreferrer" className="block text-purple-200/70 hover:text-white text-xs underline underline-offset-2 transition-colors">WhatsApp</a>
                         </div>
                     </div>
                 </div>

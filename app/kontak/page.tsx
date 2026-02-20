@@ -133,7 +133,7 @@ export default function KontakPage() {
                 </svg>
               </div>
               <h3 className="text-sm font-bold text-purple-100 mb-1">WhatsApp</h3>
-              <p className="text-purple-200/60 text-xs">+62 812-3456-78</p>
+              <p className="text-purple-200/60 text-xs">+62 896-1744-7090</p>
             </div>
           </div>
 

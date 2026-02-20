@@ -12,7 +12,7 @@ export default function AdminProdukPage() {
         price: '',
         description: '',
         image: '',
-        whatsappNumber: '62812345678',
+        whatsappNumber: '6289617447090',
     })
 
     useEffect(() => {
@@ -20,7 +20,7 @@ export default function AdminProdukPage() {
     }, [])
 
     const resetForm = () => {
-        setFormData({ name: '', price: '', description: '', image: '', whatsappNumber: '62812345678' })
+        setFormData({ name: '', price: '', description: '', image: '', whatsappNumber: '6289617447090' })
         setEditingId(null)
         setShowForm(false)
     }

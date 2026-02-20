@@ -1,45 +1,86 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { adminLogin } from '@/lib/store'
+import { adminLogin, getDeviceLoginCount, recordLoginSession } from '@/lib/store'
 import Link from 'next/link'
 
-const OWNER_NAME = 'allea'
+const OWNER_NAME = 'keripik wasyif kuala tanjung kkn'
+
+const QUIZ_QUESTIONS = [
+    { question: 'Siapa owner Keripik Wasyif?', answer: 'suci' },
+    { question: 'Keripik apa saja yang dibuat?', answer: 'peyek' },
+]
 
 export default function AdminLoginPage() {
     const router = useRouter()
-    const [step, setStep] = useState<'verify' | 'login'>('verify')
+    const [step, setStep] = useState<'loading' | 'verify' | 'quiz' | 'login'>('loading')
     const [ownerInput, setOwnerInput] = useState('')
     const [verifyError, setVerifyError] = useState('')
+    const [quizQuestion, setQuizQuestion] = useState(QUIZ_QUESTIONS[0])
+    const [quizAnswer, setQuizAnswer] = useState('')
+    const [quizError, setQuizError] = useState('')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
+    useEffect(() => {
+        // Check if device has 3+ logins → skip verification
+        getDeviceLoginCount().then((count) => {
+            if (count >= 3) {
+                setStep('login')
+            } else {
+                setStep('verify')
+            }
+        })
+    }, [])
+
     const handleVerify = (e: React.FormEvent) => {
         e.preventDefault()
         setVerifyError('')
         if (ownerInput.trim().toLowerCase() === OWNER_NAME.toLowerCase()) {
-            setStep('login')
+            // Pick a random quiz question
+            const randomQ = QUIZ_QUESTIONS[Math.floor(Math.random() * QUIZ_QUESTIONS.length)]
+            setQuizQuestion(randomQ)
+            setStep('quiz')
         } else {
             setVerifyError('Nama pemilik salah! Anda bukan admin yang berwenang.')
         }
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleQuiz = (e: React.FormEvent) => {
+        e.preventDefault()
+        setQuizError('')
+        if (quizAnswer.trim().toLowerCase() === quizQuestion.answer.toLowerCase()) {
+            setStep('login')
+        } else {
+            setQuizError('Jawaban salah! Coba lagi.')
+        }
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError('')
         setIsLoading(true)
 
-        setTimeout(() => {
+        setTimeout(async () => {
             if (adminLogin(username, password)) {
+                await recordLoginSession()
                 router.push('/admin')
             } else {
                 setError('Username atau password salah!')
                 setIsLoading(false)
             }
         }, 500)
+    }
+
+    if (step === 'loading') {
+        return (
+            <div className="min-h-screen bg-black/50 flex items-center justify-center">
+                <div className="text-purple-300 animate-pulse">Memuat...</div>
+            </div>
+        )
     }
 
     return (
@@ -51,7 +92,7 @@ export default function AdminLoginPage() {
             </div>
 
             <div className="w-full max-w-md">
-                {/* Warning Announcement */}
+                {/* Warning */}
                 <div className="mb-6 relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-orange-500/5 to-transparent rounded-2xl backdrop-blur-xl border border-red-500/30"></div>
                     <div className="relative p-5 flex items-start gap-4">
@@ -69,7 +110,7 @@ export default function AdminLoginPage() {
                     </div>
                 </div>
 
-                {step === 'verify' ? (
+                {step === 'verify' && (
                     <>
                         {/* Verification Step */}
                         <div className="text-center mb-8">
@@ -123,7 +164,70 @@ export default function AdminLoginPage() {
                             </form>
                         </div>
                     </>
-                ) : (
+                )}
+
+                {step === 'quiz' && (
+                    <>
+                        {/* Quiz Step */}
+                        <div className="text-center mb-8">
+                            <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-yellow-500/30 to-orange-700/30 border border-yellow-500/30 mb-4">
+                                <svg className="w-10 h-10 text-yellow-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h1 className="text-3xl font-bold bg-gradient-to-r from-yellow-300 via-orange-400 to-yellow-500 bg-clip-text text-transparent">
+                                Pertanyaan Keamanan
+                            </h1>
+                            <p className="text-purple-200/60 text-sm mt-2">Jawab pertanyaan berikut untuk melanjutkan</p>
+                        </div>
+
+                        <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-orange-400/5 to-transparent rounded-2xl backdrop-blur-xl border border-yellow-500/20"></div>
+                            <form onSubmit={handleQuiz} className="relative p-8 space-y-6">
+                                {quizError && (
+                                    <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm text-center">
+                                        {quizError}
+                                    </div>
+                                )}
+
+                                <div className="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-center">
+                                    <p className="text-yellow-200 font-semibold text-lg">{quizQuestion.question}</p>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-purple-200 mb-2">Jawaban Anda</label>
+                                    <input
+                                        type="text"
+                                        value={quizAnswer}
+                                        onChange={(e) => setQuizAnswer(e.target.value)}
+                                        placeholder="Masukkan jawaban"
+                                        className="w-full px-4 py-3 rounded-lg bg-purple-950/40 border border-yellow-500/30 text-purple-100 placeholder-purple-300/50 focus:outline-none focus:border-yellow-400/60 focus:bg-purple-950/60 transition-all duration-300"
+                                        required
+                                    />
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    className="w-full py-3 px-6 bg-gradient-to-r from-yellow-500/80 to-orange-600/80 hover:from-yellow-500 hover:to-orange-600 text-white font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 backdrop-blur-sm border border-yellow-400/30 hover:border-yellow-300/60 active:scale-95"
+                                >
+                                    Jawab
+                                </button>
+
+                                <div className="text-center">
+                                    <button
+                                        type="button"
+                                        onClick={() => { setStep('verify'); setOwnerInput(''); setQuizAnswer(''); setQuizError('') }}
+                                        className="text-purple-300/60 hover:text-purple-200 text-xs transition-colors"
+                                    >
+                                        ← Kembali ke verifikasi
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </>
+                )}
+
+                {step === 'login' && (
                     <>
                         {/* Login Step */}
                         <div className="text-center mb-8">
@@ -195,15 +299,8 @@ export default function AdminLoginPage() {
                                 </button>
 
                                 <div className="flex items-center justify-between">
-                                    <button
-                                        type="button"
-                                        onClick={() => { setStep('verify'); setOwnerInput(''); setVerifyError('') }}
-                                        className="text-purple-300/60 hover:text-purple-200 text-xs transition-colors"
-                                    >
-                                        ← Kembali ke verifikasi
-                                    </button>
                                     <Link href="/" className="text-purple-300/60 hover:text-purple-200 text-xs transition-colors">
-                                        Halaman utama →
+                                        ← Halaman utama
                                     </Link>
                                 </div>
                             </form>

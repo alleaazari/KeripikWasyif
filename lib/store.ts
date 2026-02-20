@@ -402,11 +402,119 @@ export async function updateHeroSettings(updates: Partial<Omit<HeroSettings, 'id
     }
 }
 
-// ============ AUTH (tetap localStorage) ============
-
+// ============ AUTH + SESSION TRACKING ============
 
 const ADMIN_USERNAME = 'akutelang'
 const ADMIN_PASSWORD = '456789'
+
+export interface LoginSession {
+    id: string
+    device_id: string
+    device_info: string
+    location: string
+    login_count: number
+    last_login: string
+    created_at: string
+}
+
+function getDeviceFingerprint(): string {
+    if (typeof window === 'undefined') return ''
+    const stored = localStorage.getItem('kw_device_id')
+    if (stored) return stored
+    const fp = `device_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`
+    localStorage.setItem('kw_device_id', fp)
+    return fp
+}
+
+function getDeviceInfo(): string {
+    if (typeof window === 'undefined') return 'Unknown'
+    const ua = navigator.userAgent
+    let device = 'Unknown'
+    if (/iPhone/i.test(ua)) device = 'iPhone'
+    else if (/iPad/i.test(ua)) device = 'iPad'
+    else if (/Android/i.test(ua)) device = 'Android'
+    else if (/Windows/i.test(ua)) device = 'Windows PC'
+    else if (/Mac/i.test(ua)) device = 'MacOS'
+    else if (/Linux/i.test(ua)) device = 'Linux'
+
+    let browser = 'Unknown Browser'
+    if (/Chrome/i.test(ua) && !/Edg/i.test(ua)) browser = 'Chrome'
+    else if (/Firefox/i.test(ua)) browser = 'Firefox'
+    else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = 'Safari'
+    else if (/Edg/i.test(ua)) browser = 'Edge'
+
+    return `${device} - ${browser}`
+}
+
+export async function getDeviceLoginCount(): Promise<number> {
+    const deviceId = getDeviceFingerprint()
+    if (!deviceId) return 0
+    const { data } = await supabase
+        .from('login_sessions')
+        .select('login_count')
+        .eq('device_id', deviceId)
+        .maybeSingle()
+    return data?.login_count || 0
+}
+
+export async function recordLoginSession() {
+    const deviceId = getDeviceFingerprint()
+    const deviceInfo = getDeviceInfo()
+    const now = new Date().toISOString()
+
+    // Get location via free API
+    let location = 'Tidak diketahui'
+    try {
+        const res = await fetch('https://ipapi.co/json/')
+        const geo = await res.json()
+        if (geo.city && geo.region) {
+            location = `${geo.city}, ${geo.region}, ${geo.country_name}`
+        }
+    } catch {
+        // fallback
+    }
+
+    // Check if device already exists
+    const { data: existing } = await supabase
+        .from('login_sessions')
+        .select('*')
+        .eq('device_id', deviceId)
+        .maybeSingle()
+
+    if (existing) {
+        await supabase
+            .from('login_sessions')
+            .update({
+                login_count: existing.login_count + 1,
+                last_login: now,
+                device_info: deviceInfo,
+                location: location,
+            })
+            .eq('device_id', deviceId)
+    } else {
+        await supabase
+            .from('login_sessions')
+            .insert({
+                device_id: deviceId,
+                device_info: deviceInfo,
+                location: location,
+                login_count: 1,
+                last_login: now,
+            })
+    }
+}
+
+export async function getLoginSessions(): Promise<LoginSession[]> {
+    const { data } = await supabase
+        .from('login_sessions')
+        .select('*')
+        .order('last_login', { ascending: false })
+    return (data || []) as LoginSession[]
+}
+
+export async function deleteLoginSession(id: string) {
+    await supabase.from('login_sessions').delete().eq('id', id)
+}
 
 export function adminLogin(username: string, password: string): boolean {
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {

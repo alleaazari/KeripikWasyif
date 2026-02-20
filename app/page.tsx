@@ -43,9 +43,9 @@ export default function Page() {
             {/* Reflection line */}
             <div className="absolute top-[48%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none"></div>
 
-            <div className="relative grid grid-cols-12 gap-8 p-12 z-10">
+            <div className="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 p-5 md:p-12 z-10">
               {/* Left - Featured Product Image */}
-              <div className="col-span-3 flex items-center justify-center">
+              <div className="hidden md:flex col-span-3 items-center justify-center">
                 <div className="relative">
                   <div className="absolute inset-0 bg-white/5 rounded-3xl transform -rotate-6 shadow-lg border border-white/10"></div>
                   <div className="relative bg-white/5 backdrop-blur-xl rounded-3xl w-64 h-80 overflow-hidden border border-white/15 shadow-[0_0_30px_-5px_rgba(168,85,247,0.3),inset_0_1px_1px_rgba(255,255,255,0.1)]">
@@ -62,9 +62,9 @@ export default function Page() {
               </div>
 
               {/* Center - Content */}
-              <div className="col-span-6 flex flex-col justify-center">
+              <div className="md:col-span-6 flex flex-col justify-center text-center md:text-left">
                 <h2 className="text-sm font-semibold text-purple-300/70 mb-2">TRUSTED</h2>
-                <h1 className="text-5xl font-bold text-purple-100 mb-6 leading-tight drop-shadow-lg">
+                <h1 className="text-3xl md:text-5xl font-bold text-purple-100 mb-4 md:mb-6 leading-tight drop-shadow-lg">
                   KERIPIK WASYIF
                   <br />
                   PLATFORM
@@ -73,7 +73,7 @@ export default function Page() {
                   {hero?.description || 'Temukan produk pilihan dengan kualitas terjamin dan harga terbaik. Belanja sekarang dan nikmati pengalaman berbelanja yang luar biasa dengan layanan terbaik kami.'}
                 </p>
 
-                <div className="flex gap-4 mb-8">
+                <div className="flex gap-3 md:gap-4 mb-6 md:mb-8 justify-center md:justify-start">
                   <Link
                     href="/katalog"
                     className="relative px-8 py-3 bg-gradient-to-r from-purple-500 via-purple-400 to-purple-600 hover:from-purple-400 hover:via-purple-500 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-[0_0_20px_-3px_rgba(168,85,247,0.5)] hover:shadow-[0_0_30px_-3px_rgba(168,85,247,0.7)] overflow-hidden"
@@ -92,7 +92,7 @@ export default function Page() {
               </div>
 
               {/* Right - Product Grid */}
-              <div className="col-span-3 flex flex-col gap-4 justify-center items-center">
+              <div className="hidden md:flex col-span-3 flex-col gap-4 justify-center items-center">
                 <div className="relative bg-white/5 backdrop-blur-xl rounded-2xl p-2 w-full aspect-square overflow-hidden border border-white/15 shadow-[0_0_25px_-5px_rgba(168,85,247,0.25),inset_0_1px_1px_rgba(255,255,255,0.1)]">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-2xl pointer-events-none z-10"></div>
                   <div className="grid grid-cols-2 gap-2 w-full h-full relative z-0">
@@ -129,7 +129,7 @@ export default function Page() {
           <h2 className="text-4xl font-bold text-purple-100 text-center mb-12 drop-shadow-lg">
             Produk Unggulan Kami
           </h2>
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {allProducts.map((product) => (
               <Link
                 key={product.id}

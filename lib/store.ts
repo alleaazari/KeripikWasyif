@@ -314,7 +314,13 @@ export interface HeroSettings {
     featured_image: string
     description: string
     grid_images: string[]
+    grid_descriptions: string[]
 }
+
+const defaultGridDescriptions = [
+    'Produk 1', 'Produk 2', 'Produk 3', 'Produk 4',
+    'Produk 5', 'Produk 6', 'Produk 7', 'Produk 8',
+]
 
 const defaultHeroSettings: Omit<HeroSettings, 'id'> = {
     featured_image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=500&fit=crop',
@@ -329,6 +335,27 @@ const defaultHeroSettings: Omit<HeroSettings, 'id'> = {
         'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=200&h=200&fit=crop',
         'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=200&h=200&fit=crop',
     ],
+    grid_descriptions: defaultGridDescriptions,
+}
+
+export async function uploadImage(file: File): Promise<string | null> {
+    const ext = file.name.split('.').pop()
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`
+
+    const { error } = await supabase.storage
+        .from('images')
+        .upload(fileName, file, { cacheControl: '3600', upsert: false })
+
+    if (error) {
+        console.error('Upload error:', error)
+        return null
+    }
+
+    const { data: urlData } = supabase.storage
+        .from('images')
+        .getPublicUrl(fileName)
+
+    return urlData.publicUrl
 }
 
 export async function getHeroSettings(): Promise<HeroSettings> {
@@ -344,6 +371,7 @@ export async function getHeroSettings(): Promise<HeroSettings> {
             featured_image: data.featured_image,
             description: data.description,
             grid_images: data.grid_images || defaultHeroSettings.grid_images,
+            grid_descriptions: data.grid_descriptions || defaultGridDescriptions,
         }
     }
 
@@ -360,6 +388,7 @@ export async function getHeroSettings(): Promise<HeroSettings> {
             featured_image: newData.featured_image,
             description: newData.description,
             grid_images: newData.grid_images || defaultHeroSettings.grid_images,
+            grid_descriptions: newData.grid_descriptions || defaultGridDescriptions,
         }
     }
 

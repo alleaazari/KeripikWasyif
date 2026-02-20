@@ -9,7 +9,7 @@ export function Navbar() {
   const [hoveredLink, setHoveredLink] = useState<string | null>(null)
 
   const links = [
-    { id: 'beranda', label: 'Home', href: '/' },
+    { id: 'beranda', label: 'Beranda', href: '/' },
     { id: 'katalog', label: 'Katalog', href: '/katalog' },
     { id: 'kontak', label: 'Kontak', href: '/kontak' },
     { id: 'ulasan', label: 'Ulasan', href: '/ulasan' },
@@ -26,7 +26,7 @@ export function Navbar() {
   const activeLink = getActiveLink()
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/20 border-b border-purple-500/20">
+    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b border-purple-500/20">
       <div className="flex justify-center items-center py-4 px-6">
         <div className="flex items-center justify-center gap-12">
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-all duration-300">

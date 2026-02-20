@@ -33,19 +33,58 @@ export default function Page() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-12 px-6">
+      <section className="pt-20 md:pt-24 pb-8 md:pb-12 px-4 md:px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="relative bg-white/5 backdrop-blur-2xl rounded-3xl shadow-[0_0_60px_-15px_rgba(168,85,247,0.4),inset_0_1px_1px_rgba(255,255,255,0.1)] overflow-hidden border border-white/15">
+          <div className="relative bg-white/5 backdrop-blur-2xl rounded-2xl md:rounded-3xl shadow-[0_0_60px_-15px_rgba(168,85,247,0.4),inset_0_1px_1px_rgba(255,255,255,0.1)] overflow-hidden border border-white/15">
             {/* Glass glossy overlays */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-purple-500/5 to-transparent pointer-events-none rounded-3xl"></div>
-            <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/8 to-transparent pointer-events-none rounded-t-3xl"></div>
-            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-purple-900/20 to-transparent pointer-events-none rounded-b-3xl"></div>
-            {/* Reflection line */}
-            <div className="absolute top-[48%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-purple-500/5 to-transparent pointer-events-none rounded-2xl md:rounded-3xl"></div>
+            <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/8 to-transparent pointer-events-none rounded-t-2xl md:rounded-t-3xl"></div>
+            <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-purple-900/20 to-transparent pointer-events-none rounded-b-2xl md:rounded-b-3xl"></div>
 
-            <div className="relative grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 p-5 md:p-12 z-10">
+            {/* Mobile Hero - simple stacked layout */}
+            <div className="relative z-10 lg:hidden p-5 sm:p-8">
+              <div className="text-center">
+                <h2 className="text-xs sm:text-sm font-semibold text-purple-300/70 mb-2">TRUSTED</h2>
+                <h1 className="text-2xl sm:text-3xl font-bold text-purple-100 mb-3 leading-tight drop-shadow-lg">
+                  KERIPIK WASYIF<br />PLATFORM
+                </h1>
+                <p className="text-purple-200/80 text-xs sm:text-sm mb-5 leading-relaxed max-w-md mx-auto">
+                  {hero?.description || 'Temukan produk pilihan dengan kualitas terjamin dan harga terbaik. Belanja sekarang dan nikmati pengalaman berbelanja yang luar biasa.'}
+                </p>
+                <div className="flex gap-3 justify-center mb-5">
+                  <Link
+                    href="/katalog"
+                    className="relative px-5 sm:px-6 py-2.5 bg-gradient-to-r from-purple-500 via-purple-400 to-purple-600 text-white font-semibold rounded-lg text-sm shadow-[0_0_20px_-3px_rgba(168,85,247,0.5)] overflow-hidden"
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent pointer-events-none rounded-lg"></span>
+                    <span className="relative z-10">Get Started</span>
+                  </Link>
+                  <Link
+                    href="#"
+                    className="relative px-5 sm:px-6 py-2.5 bg-white/5 text-purple-100 font-semibold rounded-lg text-sm border border-white/20 backdrop-blur-sm overflow-hidden"
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none rounded-lg"></span>
+                    <span className="relative z-10">Read More</span>
+                  </Link>
+                </div>
+
+                {/* Mobile grid images - compact 2x2 */}
+                {hero?.grid_images && hero.grid_images.length > 0 && (
+                  <div className="grid grid-cols-4 gap-2 max-w-xs mx-auto">
+                    {hero.grid_images.slice(0, 4).map((img, i) => (
+                      <div key={i} className="rounded-lg overflow-hidden border border-white/10 aspect-square">
+                        <img src={img} alt={`Grid ${i + 1}`} className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Desktop Hero - 12 column grid */}
+            <div className="relative z-10 hidden lg:grid grid-cols-12 gap-8 p-12">
               {/* Left - Featured Product Image */}
-              <div className="hidden md:flex col-span-3 items-center justify-center">
+              <div className="col-span-3 flex items-center justify-center">
                 <div className="relative">
                   <div className="absolute inset-0 bg-white/5 rounded-3xl transform -rotate-6 shadow-lg border border-white/10"></div>
                   <div className="relative bg-white/5 backdrop-blur-xl rounded-3xl w-64 h-80 overflow-hidden border border-white/15 shadow-[0_0_30px_-5px_rgba(168,85,247,0.3),inset_0_1px_1px_rgba(255,255,255,0.1)]">
@@ -62,9 +101,9 @@ export default function Page() {
               </div>
 
               {/* Center - Content */}
-              <div className="md:col-span-6 flex flex-col justify-center text-center md:text-left">
+              <div className="col-span-6 flex flex-col justify-center">
                 <h2 className="text-sm font-semibold text-purple-300/70 mb-2">TRUSTED</h2>
-                <h1 className="text-3xl md:text-5xl font-bold text-purple-100 mb-4 md:mb-6 leading-tight drop-shadow-lg">
+                <h1 className="text-5xl font-bold text-purple-100 mb-6 leading-tight drop-shadow-lg">
                   KERIPIK WASYIF
                   <br />
                   PLATFORM
@@ -73,7 +112,7 @@ export default function Page() {
                   {hero?.description || 'Temukan produk pilihan dengan kualitas terjamin dan harga terbaik. Belanja sekarang dan nikmati pengalaman berbelanja yang luar biasa dengan layanan terbaik kami.'}
                 </p>
 
-                <div className="flex gap-3 md:gap-4 mb-6 md:mb-8 justify-center md:justify-start">
+                <div className="flex gap-4 mb-8">
                   <Link
                     href="/katalog"
                     className="relative px-8 py-3 bg-gradient-to-r from-purple-500 via-purple-400 to-purple-600 hover:from-purple-400 hover:via-purple-500 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-[0_0_20px_-3px_rgba(168,85,247,0.5)] hover:shadow-[0_0_30px_-3px_rgba(168,85,247,0.7)] overflow-hidden"
@@ -92,7 +131,7 @@ export default function Page() {
               </div>
 
               {/* Right - Product Grid */}
-              <div className="hidden md:flex col-span-3 flex-col gap-4 justify-center items-center">
+              <div className="col-span-3 flex flex-col gap-4 justify-center items-center">
                 <div className="relative bg-white/5 backdrop-blur-xl rounded-2xl p-2 w-full aspect-square overflow-hidden border border-white/15 shadow-[0_0_25px_-5px_rgba(168,85,247,0.25),inset_0_1px_1px_rgba(255,255,255,0.1)]">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-2xl pointer-events-none z-10"></div>
                   <div className="grid grid-cols-2 gap-2 w-full h-full relative z-0">
@@ -124,27 +163,25 @@ export default function Page() {
       </section>
 
       {/* Products Preview Section */}
-      <section className="py-20 px-6">
+      <section className="py-10 md:py-20 px-4 md:px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-purple-100 text-center mb-12 drop-shadow-lg">
+          <h2 className="text-2xl md:text-4xl font-bold text-purple-100 text-center mb-8 md:mb-12 drop-shadow-lg">
             Produk Unggulan Kami
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
             {allProducts.map((product) => (
               <Link
                 key={product.id}
                 href="/katalog"
-                className="group relative bg-white/5 backdrop-blur-2xl rounded-2xl shadow-[0_0_30px_-10px_rgba(168,85,247,0.3),inset_0_1px_1px_rgba(255,255,255,0.1)] p-5 hover:shadow-[0_0_50px_-10px_rgba(168,85,247,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] transition-all duration-500 hover:-translate-y-3 border border-white/15 hover:border-purple-300/50 overflow-hidden"
+                className="group relative bg-white/5 backdrop-blur-2xl rounded-xl md:rounded-2xl shadow-[0_0_30px_-10px_rgba(168,85,247,0.3),inset_0_1px_1px_rgba(255,255,255,0.1)] p-3 md:p-5 hover:shadow-[0_0_50px_-10px_rgba(168,85,247,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] transition-all duration-500 hover:-translate-y-2 md:hover:-translate-y-3 border border-white/15 hover:border-purple-300/50 overflow-hidden"
               >
                 {/* Glass glossy overlays */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-purple-500/5 to-transparent pointer-events-none rounded-2xl"></div>
-                <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/8 to-transparent pointer-events-none rounded-t-2xl"></div>
-                <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-purple-900/30 to-transparent pointer-events-none rounded-b-2xl"></div>
-                {/* Reflection line */}
-                <div className="absolute top-[45%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-purple-500/5 to-transparent pointer-events-none rounded-xl md:rounded-2xl"></div>
+                <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/8 to-transparent pointer-events-none rounded-t-xl md:rounded-t-2xl"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-purple-900/30 to-transparent pointer-events-none rounded-b-xl md:rounded-b-2xl"></div>
 
                 <div className="relative z-10">
-                  <div className="relative rounded-xl mb-4 overflow-hidden aspect-square border border-white/10 shadow-inner">
+                  <div className="relative rounded-lg md:rounded-xl mb-3 md:mb-4 overflow-hidden aspect-square border border-white/10 shadow-inner">
                     <img
                       src={product.image}
                       alt={product.name}
@@ -152,10 +189,9 @@ export default function Page() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-purple-900/40 via-transparent to-white/5 pointer-events-none"></div>
                   </div>
-                  <h3 className="text-purple-100 font-bold mb-1 text-sm">{product.name}</h3>
-                  <p className="text-purple-300 font-semibold mb-1">{product.price}</p>
-                  {/* Deskripsi: tersembunyi secara default, muncul saat hover */}
-                  <p className="text-purple-200/70 text-xs leading-relaxed opacity-0 max-h-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:max-h-24 group-hover:mt-2">
+                  <h3 className="text-purple-100 font-bold mb-1 text-xs md:text-sm truncate">{product.name}</h3>
+                  <p className="text-purple-300 font-semibold mb-1 text-xs md:text-sm">{product.price}</p>
+                  <p className="text-purple-200/70 text-xs leading-relaxed opacity-0 max-h-0 overflow-hidden transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:max-h-24 group-hover:mt-1">
                     {product.description}
                   </p>
                 </div>
@@ -171,5 +207,3 @@ export default function Page() {
     </div>
   )
 }
-
-

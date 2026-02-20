@@ -19,9 +19,10 @@ export function Footer() {
 
                     {/* navbar */}
                     <div className="text-center">
-                        <div className="flex flex-row sm:flex-col gap-3 sm:gap-2 justify-center">
+                        <div className="flex flex-row sm:flex-col gap-3 sm:gap-2 justify-center flex-wrap">
                             <Link href="/" className="text-purple-200/70 hover:text-white text-xs transition-colors">Beranda</Link>
                             <Link href="/katalog" className="text-purple-200/70 hover:text-white text-xs transition-colors">Katalog</Link>
+                            <Link href="/kegiatan" className="text-purple-200/70 hover:text-white text-xs transition-colors">Kegiatan KKN</Link>
                             <Link href="/kontak" className="text-purple-200/70 hover:text-white text-xs transition-colors">Kontak</Link>
                             <Link href="/ulasan" className="text-purple-200/70 hover:text-white text-xs transition-colors">Ulasan</Link>
                         </div>

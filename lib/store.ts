@@ -532,3 +532,38 @@ export function isAdminLoggedIn(): boolean {
     if (typeof window === 'undefined') return false
     return localStorage.getItem('tt_admin_auth') === 'true'
 }
+
+// ============ KEGIATAN KKN ============
+
+export interface KegiatanKKN {
+    id: string
+    title: string
+    description: string
+    image: string
+    date: string
+    location: string
+    created_at: string
+}
+
+export async function getKegiatanKKN(): Promise<KegiatanKKN[]> {
+    const { data } = await supabase
+        .from('kegiatan_kkn')
+        .select('*')
+        .order('date', { ascending: false })
+    return (data || []) as KegiatanKKN[]
+}
+
+export async function addKegiatanKKN(kegiatan: Omit<KegiatanKKN, 'id' | 'created_at'>) {
+    await supabase.from('kegiatan_kkn').insert({
+        ...kegiatan,
+        created_at: new Date().toISOString(),
+    })
+}
+
+export async function updateKegiatanKKN(id: string, updates: Partial<KegiatanKKN>) {
+    await supabase.from('kegiatan_kkn').update(updates).eq('id', id)
+}
+
+export async function deleteKegiatanKKN(id: string) {
+    await supabase.from('kegiatan_kkn').delete().eq('id', id)
+}

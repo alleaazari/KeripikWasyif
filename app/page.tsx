@@ -5,16 +5,18 @@ import Link from 'next/link'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { AdminFloatingButton } from '@/components/admin-floating-button'
-import { getProducts, trackVisitor, type Product } from '@/lib/store'
+import { getProducts, trackVisitor, getHeroSettings, type Product, type HeroSettings } from '@/lib/store'
 
 export default function Page() {
   const [allProducts, setAllProducts] = useState<Product[]>([])
+  const [hero, setHero] = useState<HeroSettings | null>(null)
 
   useEffect(() => {
     const load = async () => {
       trackVisitor()
       const products = await getProducts()
       setAllProducts(products.slice(0, 4))
+      setHero(await getHeroSettings())
     }
     load()
   }, [])
@@ -50,8 +52,8 @@ export default function Page() {
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-3xl pointer-events-none z-10"></div>
                     <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/5 to-transparent pointer-events-none z-10 rounded-t-3xl"></div>
                     <img
-                      src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=500&fit=crop"
-                      alt="Featured Shoe"
+                      src={hero?.featured_image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=500&fit=crop'}
+                      alt="Featured"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-purple-900/40 via-transparent to-transparent pointer-events-none"></div>
@@ -68,7 +70,7 @@ export default function Page() {
                   PLATFORM
                 </h1>
                 <p className="text-purple-200/80 text-sm mb-8 leading-relaxed">
-                  Temukan produk pilihan dengan kualitas terjamin dan harga terbaik. Belanja sekarang dan nikmati pengalaman berbelanja yang luar biasa dengan layanan terbaik kami.
+                  {hero?.description || 'Temukan produk pilihan dengan kualitas terjamin dan harga terbaik. Belanja sekarang dan nikmati pengalaman berbelanja yang luar biasa dengan layanan terbaik kami.'}
                 </p>
 
                 <div className="flex gap-4 mb-8">
@@ -87,12 +89,6 @@ export default function Page() {
                     <span className="relative z-10">Read More</span>
                   </Link>
                 </div>
-
-                <p className="text-xs font-bold text-purple-300/60 uppercase tracking-widest">
-                  SPECIAL DISCOUNT
-                  <br />
-                  UP TO 50% OFF FOR ALL ITEMS
-                </p>
               </div>
 
               {/* Right - Product Grid */}
@@ -100,10 +96,9 @@ export default function Page() {
                 <div className="relative bg-white/5 backdrop-blur-xl rounded-2xl p-2 w-full aspect-square overflow-hidden border border-white/15 shadow-[0_0_25px_-5px_rgba(168,85,247,0.25),inset_0_1px_1px_rgba(255,255,255,0.1)]">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-2xl pointer-events-none z-10"></div>
                   <div className="grid grid-cols-2 gap-2 w-full h-full relative z-0">
-                    <div className="rounded-xl overflow-hidden border border-white/10"><img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=200&h=200&fit=crop" alt="Shoe 1" className="w-full h-full object-cover" /></div>
-                    <div className="rounded-xl overflow-hidden border border-white/10"><img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=200&h=200&fit=crop" alt="Shoe 2" className="w-full h-full object-cover" /></div>
-                    <div className="rounded-xl overflow-hidden border border-white/10"><img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=200&h=200&fit=crop" alt="Shoe 3" className="w-full h-full object-cover" /></div>
-                    <div className="rounded-xl overflow-hidden border border-white/10"><img src="https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=200&h=200&fit=crop" alt="Shoe 4" className="w-full h-full object-cover" /></div>
+                    {(hero?.grid_images || []).slice(0, 4).map((img, i) => (
+                      <div key={i} className="rounded-xl overflow-hidden border border-white/10"><img src={img} alt={`Grid ${i + 1}`} className="w-full h-full object-cover" /></div>
+                    ))}
                   </div>
                 </div>
 
@@ -117,10 +112,9 @@ export default function Page() {
                 <div className="relative bg-white/5 backdrop-blur-xl rounded-2xl p-2 w-full aspect-square overflow-hidden border border-white/15 shadow-[0_0_25px_-5px_rgba(168,85,247,0.25),inset_0_1px_1px_rgba(255,255,255,0.1)]">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-2xl pointer-events-none z-10"></div>
                   <div className="grid grid-cols-2 gap-2 w-full h-full relative z-0">
-                    <div className="rounded-xl overflow-hidden border border-white/10"><img src="https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&h=200&fit=crop" alt="Shoe 5" className="w-full h-full object-cover" /></div>
-                    <div className="rounded-xl overflow-hidden border border-white/10"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop" alt="Shoe 6" className="w-full h-full object-cover" /></div>
-                    <div className="rounded-xl overflow-hidden border border-white/10"><img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=200&h=200&fit=crop" alt="Shoe 7" className="w-full h-full object-cover" /></div>
-                    <div className="rounded-xl overflow-hidden border border-white/10"><img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=200&h=200&fit=crop" alt="Shoe 8" className="w-full h-full object-cover" /></div>
+                    {(hero?.grid_images || []).slice(4, 8).map((img, i) => (
+                      <div key={i} className="rounded-xl overflow-hidden border border-white/10"><img src={img} alt={`Grid ${i + 5}`} className="w-full h-full object-cover" /></div>
+                    ))}
                   </div>
                 </div>
               </div>

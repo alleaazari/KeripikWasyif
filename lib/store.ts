@@ -307,7 +307,74 @@ export async function deleteContactMessage(id: string) {
     await supabase.from('contact_messages').delete().eq('id', id)
 }
 
+// ============ HERO SETTINGS ============
+
+export interface HeroSettings {
+    id: string
+    featured_image: string
+    description: string
+    grid_images: string[]
+}
+
+const defaultHeroSettings: Omit<HeroSettings, 'id'> = {
+    featured_image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=500&fit=crop',
+    description: 'Temukan produk pilihan dengan kualitas terjamin dan harga terbaik. Belanja sekarang dan nikmati pengalaman berbelanja yang luar biasa dengan layanan terbaik kami.',
+    grid_images: [
+        'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=200&h=200&fit=crop',
+        'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=200&h=200&fit=crop',
+        'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=200&h=200&fit=crop',
+        'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=200&h=200&fit=crop',
+        'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&h=200&fit=crop',
+        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop',
+        'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=200&h=200&fit=crop',
+        'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=200&h=200&fit=crop',
+    ],
+}
+
+export async function getHeroSettings(): Promise<HeroSettings> {
+    const { data } = await supabase
+        .from('hero_settings')
+        .select('*')
+        .limit(1)
+        .maybeSingle()
+
+    if (data) {
+        return {
+            id: data.id,
+            featured_image: data.featured_image,
+            description: data.description,
+            grid_images: data.grid_images || defaultHeroSettings.grid_images,
+        }
+    }
+
+    // Seed default if table empty
+    const { data: newData } = await supabase
+        .from('hero_settings')
+        .insert(defaultHeroSettings)
+        .select()
+        .single()
+
+    if (newData) {
+        return {
+            id: newData.id,
+            featured_image: newData.featured_image,
+            description: newData.description,
+            grid_images: newData.grid_images || defaultHeroSettings.grid_images,
+        }
+    }
+
+    return { id: '', ...defaultHeroSettings }
+}
+
+export async function updateHeroSettings(updates: Partial<Omit<HeroSettings, 'id'>>) {
+    const current = await getHeroSettings()
+    if (current.id) {
+        await supabase.from('hero_settings').update(updates).eq('id', current.id)
+    }
+}
+
 // ============ AUTH (tetap localStorage) ============
+
 
 const ADMIN_USERNAME = 'akutelang'
 const ADMIN_PASSWORD = '456789'

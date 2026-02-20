@@ -32,8 +32,8 @@ export default function Icon() {
                 <img
                     src={new URL('./icon.png', import.meta.url).toString()}
                     style={{
-                        width: '115%', // Scale up to reduce white space
-                        height: '115%',
+                        width: '140%', // Scale up significantly to fill the space
+                        height: '140%',
                         objectFit: 'cover',
                     }}
                 />

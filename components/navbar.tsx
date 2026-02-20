@@ -34,8 +34,8 @@ export function Navbar() {
         {/* Mobile: brand left + hamburger right */}
         <div className="lg:hidden flex justify-between items-center py-3 px-4">
           <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-all duration-300">
-            <img src="/icon.png" alt="KripikWasyif" className="w-10 h-10 rounded-full" />
-            <span className="text-sm font-bold bg-gradient-to-r from-purple-300 to-purple-500 bg-clip-text text-transparent whitespace-nowrap">
+            <img src="/icon.png" alt="KripikWasyif" className="w-14 h-14 rounded-full border-2 border-purple-500/30 shadow-[0_0_15px_-3px_rgba(168,85,247,0.5)]" />
+            <span className="text-base font-bold bg-gradient-to-r from-purple-300 to-purple-500 bg-clip-text text-transparent whitespace-nowrap">
               Keripik Wasyif
             </span>
           </Link>
@@ -59,8 +59,8 @@ export function Navbar() {
         <div className="hidden lg:flex justify-center items-center py-4 px-6">
           <div className="flex items-center gap-10">
             <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-all duration-300">
-              <img src="/icon.png" alt="KripikWasyif" className="w-16 h-16 rounded-full" />
-              <span className="text-lg font-bold bg-gradient-to-r from-purple-300 to-purple-500 bg-clip-text text-transparent whitespace-nowrap">
+              <img src="/icon.png" alt="KripikWasyif" className="w-24 h-24 rounded-full border-4 border-purple-500/20 shadow-[0_0_30px_-5px_rgba(168,85,247,0.4)]" />
+              <span className="text-2xl font-black bg-gradient-to-r from-purple-100 via-purple-300 to-purple-500 bg-clip-text text-transparent whitespace-nowrap">
                 Keripik Wasyif
               </span>
             </Link>

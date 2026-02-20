@@ -567,3 +567,20 @@ export async function updateKegiatanKKN(id: string, updates: Partial<KegiatanKKN
 export async function deleteKegiatanKKN(id: string) {
     await supabase.from('kegiatan_kkn').delete().eq('id', id)
 }
+
+export async function uploadKegiatanImage(file: File): Promise<string> {
+    const ext = file.name.split('.').pop()
+    const fileName = `kegiatan_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${ext}`
+
+    const { error } = await supabase.storage
+        .from('kegiatan-images')
+        .upload(fileName, file, { cacheControl: '3600', upsert: false })
+
+    if (error) throw error
+
+    const { data: publicData } = supabase.storage
+        .from('kegiatan-images')
+        .getPublicUrl(fileName)
+
+    return publicData.publicUrl
+}
